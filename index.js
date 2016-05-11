@@ -1,4 +1,8 @@
-module.exports = function(sails) {
+var path = require('path');
+var webpack = require('webpack');
+var webpackDevServer = require("webpack-dev-server");
+
+module.exports = function (sails) {
 
   return {
 
@@ -8,11 +12,11 @@ module.exports = function(sails) {
       }
     },
 
-    configure: function() {
+    configure: function () {
       var config = sails.config[this.configKey];
 
-      sails.log.verbose("Vue.js hook activated.");
+      sails.log.verbose("Vue.js hook configured.");
     }
 
-  }
-};
+  };
+}
