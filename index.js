@@ -1,3 +1,4 @@
+var path = require('path');
 var webpack = require('webpack');
 var webpackDevServer = require("webpack-dev-server");
 
@@ -12,9 +13,9 @@ module.exports = function (sails) {
     },
 
     config: {
-      entry: ['./src/main.js'],
+      entry: [path.resolve(__dirname, '../../src/main.js')],
       output: {
-        path: './assets/',
+        path: path.resolve(__dirname, '../../assets/'),
         filename: 'js/build/bundle.js',
         publicPath: 'http://localhost:3000/'
       },
@@ -24,7 +25,9 @@ module.exports = function (sails) {
         new webpack.NoErrorsPlugin()
       ],
       resolveLoader: {
-        modulesDirectories: ['node_modules']
+        modulesDirectories: [
+          path.resolve(__dirname, '../../node_modules')
+        ]
       },
       module: {
         loaders: [
@@ -36,6 +39,22 @@ module.exports = function (sails) {
             test: /\.js$/,
             loader: 'babel',
             exclude: /node_modules/
+          },
+          {
+            test: /\.json$/,
+            loader: 'json'
+          },
+          {
+            test: /\.html$/,
+            loader: 'vue-html'
+          },
+          {
+            test: /\.(png|jpg|gif|svg)$/,
+            loader: 'url',
+            query: {
+              limit: 10000,
+              name: '[name].[ext]?[hash]'
+            }
           }
         ]
       }
