@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
-var webpackDevServer = require("webpack-dev-server");
+var webpackDevServer = require('webpack-dev-server');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = function (sails) {
 
@@ -15,14 +16,20 @@ module.exports = function (sails) {
     config: {
       entry: [path.resolve(__dirname, '../../src/main.js')],
       output: {
-        path: path.resolve(__dirname, '../../assets/'),
+        path: path.resolve(sails.config.paths.public),
         filename: 'js/build/bundle.js',
         publicPath: 'http://localhost:3000/'
       },
       plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+        new CopyWebpackPlugin([
+          {
+            from: path.resolve(__dirname, '../../src/assets/'),
+            to: 'assets'
+          }
+        ])
       ],
       resolveLoader: {
         modulesDirectories: [
@@ -39,22 +46,6 @@ module.exports = function (sails) {
             test: /\.js$/,
             loader: 'babel',
             exclude: /node_modules/
-          },
-          {
-            test: /\.json$/,
-            loader: 'json'
-          },
-          {
-            test: /\.html$/,
-            loader: 'vue-html'
-          },
-          {
-            test: /\.(png|jpg|gif|svg)$/,
-            loader: 'url',
-            query: {
-              limit: 10000,
-              name: '[name].[ext]?[hash]'
-            }
           }
         ]
       }
